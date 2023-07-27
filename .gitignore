@@ -1,0 +1,15 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain-types
+lib
+yarn.lock
+
+#Hardhat files
+cache
+artifacts
+
+.vscode
+.DS_Store
+.idea/
