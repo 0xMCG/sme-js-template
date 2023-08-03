@@ -5,10 +5,10 @@ import {
 import {
     Seaport
 } from "@opensea/seaport-js";
-import { SeaportABIvSME } from "./abi/Seaport_vSME";
+import { SeaportABIvVRF } from "./abi/Seaport_VRF";
 import type {
-    Seaport as SMESeaport,
-} from "./typechain-types/contracts/Seaport";
+     VRFConsumerV2,
+} from "./ethers-contracts/VRFConsumerV2";
 import { MatchOrdersFulfillment } from "@opensea/seaport-js/lib/types";
 // Provider must be provided to the signer when supplying a custom signer
 const provider = new ethers.providers.JsonRpcProvider(
@@ -17,6 +17,8 @@ const provider = new ethers.providers.JsonRpcProvider(
 const smeSeaportAddress = "0x45a7f5Ff630D31Eeb1e00dc24DF2f23DF1bA0A7C"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
+const vrfAddress = "0x29668Fb4791A1E789c07DEad6Db07172ee95a5Ae"
+const nftId = "11"
 
 
 const main = async () => {
@@ -52,25 +54,24 @@ const main = async () => {
           },
         ],
       });
-    const numerator = 1;
-    const denominator = 2;
+
 
     console.log(makerOrder);
     console.log(takerOrder);
     console.log(modeOrderFulfillments);
-    const privateKey = "";
+    const privateKey = process.env["MAKER"] as string;
     const Signer = new ethers.Wallet(privateKey, provider);
     const smeContract = new Contract(
-        smeSeaportAddress,
-        SeaportABIvSME,
+        vrfAddress,
+        SeaportABIvVRF,
         Signer,
-      ) as SMESeaport;
-    smeContract.matchOrdersWithLucky([makerOrder,takerOrder],modeOrderFulfillments,numerator,denominator)
+      ) as VRFConsumerV2;
+    smeContract.requestRandomWords([makerOrder,takerOrder],modeOrderFulfillments)
      .then(console.log)
 }
 
 async function build_taker_order() {
-    const privateKey = "";
+    const privateKey = process.env["TAKER"] as string;
     const Signer = new ethers.Wallet(privateKey, provider);
 
     const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress}});
@@ -85,7 +86,7 @@ async function build_taker_order() {
                 {
                     itemType: 2,
                     token: testERC721Address,
-                    identifier: "1",
+                    identifier: nftId,
                     recipient: offerer,
                 },
             ],
@@ -105,7 +106,7 @@ async function build_taker_order() {
 }
 
 async function build_maker_order() {
-    const privateKey = "";
+    const privateKey = process.env["MAKER"] as string;
     const Signer = new ethers.Wallet(privateKey, provider);
 
     const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress}});
@@ -119,7 +120,7 @@ async function build_maker_order() {
                 {
                     itemType: 2,
                     token: testERC721Address,
-                    identifier: "1",
+                    identifier: nftId,
                 },
             ],
             consideration: [
