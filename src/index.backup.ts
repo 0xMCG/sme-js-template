@@ -14,9 +14,10 @@ import { MatchOrdersFulfillment } from "@opensea/seaport-js/lib/types";
 const provider = new ethers.providers.JsonRpcProvider(
   "https://eth-sepolia.public.blastapi.io"
 );
-const smeSeaportAddress = "0x45a7f5Ff630D31Eeb1e00dc24DF2f23DF1bA0A7C"
+const smeSeaportAddress = "0x9c1687C953Fff856e244A152995B96e569C4762A"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
+const nftId = "15"
 
 
 const main = async () => {
@@ -58,19 +59,19 @@ const main = async () => {
     console.log(makerOrder);
     console.log(takerOrder);
     console.log(modeOrderFulfillments);
-    const privateKey = "";
+    const privateKey = process.env["MAKER"] as string;
     const Signer = new ethers.Wallet(privateKey, provider);
     const smeContract = new Contract(
         smeSeaportAddress,
         SeaportABIvSME,
         Signer,
       ) as SMESeaport;
-    smeContract.matchOrdersWithLucky([makerOrder,takerOrder],modeOrderFulfillments,numerator,denominator)
+    smeContract.matchOrdersWithLucky([makerOrder,takerOrder],modeOrderFulfillments,numerator,denominator,{gasLimit: 300000})
      .then(console.log)
 }
 
 async function build_taker_order() {
-    const privateKey = "";
+    const privateKey = process.env["TAKER"] as string;
     const Signer = new ethers.Wallet(privateKey, provider);
 
     const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress}});
@@ -85,7 +86,7 @@ async function build_taker_order() {
                 {
                     itemType: 2,
                     token: testERC721Address,
-                    identifier: "1",
+                    identifier: nftId,
                     recipient: offerer,
                 },
             ],
@@ -105,7 +106,7 @@ async function build_taker_order() {
 }
 
 async function build_maker_order() {
-    const privateKey = "";
+    const privateKey = process.env["MAKER"] as string;
     const Signer = new ethers.Wallet(privateKey, provider);
 
     const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress}});
@@ -119,7 +120,7 @@ async function build_maker_order() {
                 {
                     itemType: 2,
                     token: testERC721Address,
-                    identifier: "1",
+                    identifier: nftId,
                 },
             ],
             consideration: [
