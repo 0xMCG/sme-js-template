@@ -5,20 +5,19 @@ import {
 import {
     Seaport
 } from "@opensea/seaport-js";
-import { SeaportABIvVRF } from "./abi/Seaport_VRF";
+import { SeaportABIvSME } from "./abi/Seaport_vSME";
 import type {
-     VRFConsumerV2,
-} from "./ethers-contracts/VRFConsumerV2";
+    Seaport as SMESeaport,
+} from "./typechain-types/contracts/Seaport";
 import { MatchOrdersFulfillment } from "@opensea/seaport-js/lib/types";
 // Provider must be provided to the signer when supplying a custom signer
 const provider = new ethers.providers.JsonRpcProvider(
   "https://eth-sepolia.public.blastapi.io"
 );
-const smeSeaportAddress = "0x9c1687C953Fff856e244A152995B96e569C4762A"
+const smeSeaportAddress = "0x45a7f5Ff630D31Eeb1e00dc24DF2f23DF1bA0A7C"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
-const vrfAddress = "0x9937D8D0010BdF7b3551d993CEAd030F31A0f85a"
-const nftId = "30"
+const nftId = "19"
 
 const main = async () => {
     const makerOrder = await build_maker_order();
@@ -53,7 +52,36 @@ const main = async () => {
           },
         ],
       });
-
+      modeOrderFulfillments.push({
+        offerComponents: [
+          {
+            orderIndex: 1,
+            itemIndex: 0,
+          },
+        ],
+        considerationComponents: [
+          {
+            orderIndex: 0,
+            itemIndex: 1,
+          },
+        ],
+      });
+      modeOrderFulfillments.push({
+        offerComponents: [
+          {
+            orderIndex: 1,
+            itemIndex: 0,
+          },
+        ],
+        considerationComponents: [
+          {
+            orderIndex: 0,
+            itemIndex: 2,
+          },
+        ],
+      });
+    const numerator = 1;
+    const denominator = 2;
 
     console.log(makerOrder);
     console.log(takerOrder);
@@ -61,11 +89,11 @@ const main = async () => {
     const privateKey = process.env["MAKER"] as string;
     const Signer = new ethers.Wallet(privateKey, provider);
     const smeContract = new Contract(
-        vrfAddress,
-        SeaportABIvVRF,
+        smeSeaportAddress,
+        SeaportABIvSME,
         Signer,
-      ) as VRFConsumerV2;
-    smeContract.requestRandomWords([makerOrder,takerOrder],modeOrderFulfillments)
+      ) as SMESeaport;
+    smeContract.matchOrdersWithLucky([makerOrder,takerOrder],modeOrderFulfillments,numerator,denominator,{gasLimit: 300000})
      .then(console.log)
 }
 
@@ -91,10 +119,10 @@ async function build_taker_order() {
             ],
             offer: [
                 {
-                    amount: ethers.utils.parseEther("0.0002").toString(),
+                    amount: ethers.utils.parseEther("0.00004").toString(),
                     token: testERC20Address,
-                    endAmount: ethers.utils.parseEther("0.0004").toString(),
-                },
+                    endAmount: ethers.utils.parseEther("0.0001").toString(),
+                }
             ]
         },
         offerer
@@ -124,11 +152,23 @@ async function build_maker_order() {
             ],
             consideration: [
                 {
-                    amount: ethers.utils.parseEther("0.0002").toString(),
+                    amount: ethers.utils.parseEther("0.00002").toString(),
                     token: testERC20Address,
-                    endAmount: ethers.utils.parseEther("0.0004").toString(),
-                    recipient: offerer,
+                    endAmount: ethers.utils.parseEther("0.00004").toString(),
+                    recipient: offerer
                 },
+                {
+                  amount: ethers.utils.parseEther("0.00001").toString(),
+                  token: testERC20Address,
+                  endAmount: ethers.utils.parseEther("0.00003").toString(),
+                  recipient: "0xfcfC835903314e6a29751f6D57c08e8D01Cd246b"
+                },
+                {
+                  amount: ethers.utils.parseEther("0.00001").toString(),
+                  token: testERC20Address,
+                  endAmount: ethers.utils.parseEther("0.00003").toString(),
+                  recipient: "0xfcfC835903314e6a29751f6D57c08e8D01Cd246b"
+                }
             ]
         },
         offerer

@@ -14,31 +14,15 @@ import { MatchOrdersFulfillment } from "@opensea/seaport-js/lib/types";
 const provider = new ethers.providers.JsonRpcProvider(
   "https://eth-sepolia.public.blastapi.io"
 );
-const smeSeaportAddress = "0x9c1687C953Fff856e244A152995B96e569C4762A"
+const smeSeaportAddress = "0x45a7f5Ff630D31Eeb1e00dc24DF2f23DF1bA0A7C"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
-const nftId = "15"
-
+const nftId = "19"
 
 const main = async () => {
     const makerOrder = await build_maker_order();
     const takerOrder = await build_taker_order();
     const modeOrderFulfillments: MatchOrdersFulfillment[] = [];
-    modeOrderFulfillments.push({
-        offerComponents: [
-          {
-            orderIndex: 0,
-            itemIndex: 0,
-          },
-        ],
-        considerationComponents: [
-          {
-            orderIndex: 1,
-            itemIndex: 0,
-          },
-        ],
-      });
-
       modeOrderFulfillments.push({
         offerComponents: [
           {
@@ -82,20 +66,13 @@ async function build_taker_order() {
             zone: "0x0000000000000000000000000000000000000000",
             startTime: Math.floor(new Date().getTime() / 1000).toString(),
             endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
-            consideration: [
-                {
-                    itemType: 2,
-                    token: testERC721Address,
-                    identifier: nftId,
-                    recipient: offerer,
-                },
-            ],
+            consideration: [],
             offer: [
                 {
-                    amount: ethers.utils.parseEther("0.0002").toString(),
-                    token: testERC20Address,
-                    endAmount: ethers.utils.parseEther("0.0004").toString(),
-                },
+                  amount: ethers.utils.parseEther("0.00001").toString(),
+                  token: testERC20Address,
+                  endAmount: ethers.utils.parseEther("0.00005").toString(),
+                }
             ]
         },
         offerer
@@ -116,20 +93,14 @@ async function build_maker_order() {
             zone: "0x0000000000000000000000000000000000000000",
             startTime: Math.floor(new Date().getTime() / 1000).toString(),
             endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
-            offer: [
-                {
-                    itemType: 2,
-                    token: testERC721Address,
-                    identifier: nftId,
-                },
-            ],
+            offer: [],
             consideration: [
                 {
-                    amount: ethers.utils.parseEther("0.0002").toString(),
-                    token: testERC20Address,
-                    endAmount: ethers.utils.parseEther("0.0004").toString(),
-                    recipient: offerer,
-                },
+                  amount: ethers.utils.parseEther("0.00001").toString(),
+                  token: testERC20Address,
+                  recipient: offerer,
+                  endAmount: ethers.utils.parseEther("0.00005").toString(),
+                }
             ]
         },
         offerer
