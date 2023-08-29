@@ -20,7 +20,7 @@ const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
 const nftId = "50"
 
 export const CONDUIT_KEYS_TO_CONDUIT = {
-  ["0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00"]: "0x0681Bc8F138CA32ED7725B91E8D11CfB6e10eb5f"
+  "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00": "0x0681bc8f138ca32ed7725b91e8d11cfb6e10eb5f",
 };
 
 const main = async () => {
@@ -94,7 +94,7 @@ const main = async () => {
         SeaportABIvSME,
         Signer,
     ) as SMESeaport;
-    smeContract.matchOrders([makerOrder,takerOrder], modeOrderFulfillments, 500, "00",{gasLimit: 1000000})
+    smeContract.matchOrders([makerOrder,takerOrder], modeOrderFulfillments, 500, "0x00",{gasLimit: 1500000})
      .then(console.log)
 }
 
@@ -102,12 +102,13 @@ async function build_taker_order() {
   const privateKey = process.env["TAKER"] as string;
   const Signer = new ethers.Wallet(privateKey, provider);
 
-  const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress, defaultConduitKey: "0x28c73A60ccF8c66c14EbA8935984e616Df2926e3aaaaaaaaaaaaaaaaaaaaaa00"}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
+  const seaport = new Seaport(Signer,  {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
 
   const offerer = "0x53B3F192A56a9cdA260476974443634a96529c72";
   const { executeAllActions } = await seaport.createOrder(
       {
           zone: "0x0000000000000000000000000000000000000000",
+          conduitKey: "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00",
           startTime: Math.floor(new Date().getTime() / 1000).toString(),
           endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
           consideration: [
@@ -123,60 +124,60 @@ async function build_taker_order() {
                   amount: ethers.utils.parseEther("0.00004").toString(),
                   token: testERC20Address,
                   endAmount: ethers.utils.parseEther("0.0001").toString(),
-              }
+              },
           ]
       },
       offerer
   );
-  console.log("here");
+
   const order = await executeAllActions();
   return order;
 }
 
 async function build_maker_order() {
-    const privateKey = process.env["MAKER"] as string;
-    const Signer = new ethers.Wallet(privateKey, provider);
+  const privateKey = process.env["MAKER"] as string;
+  const Signer = new ethers.Wallet(privateKey, provider);
 
-    const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
-    const offerer = "0x28c73A60ccF8c66c14EbA8935984e616Df2926e3";
-    console.log("here");
-    const { executeAllActions } = await seaport.createOrder(
-        {
-            zone: "0x0000000000000000000000000000000000000000",
-            conduitKey: "0x28c73A60ccF8c66c14EbA8935984e616Df2926e3aaaaaaaaaaaaaaaaaaaaaa00",
-            startTime: Math.floor(new Date().getTime() / 1000).toString(),
-            endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
-            offer: [
-                {
-                    itemType: 2,
-                    token: testERC721Address,
-                    identifier: nftId,
-                },
-            ],
-            consideration: [
+  const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
+  const offerer = "0x28c73A60ccF8c66c14EbA8935984e616Df2926e3";
+  const { executeAllActions } = await seaport.createOrder(
+      {
+          zone: "0x0000000000000000000000000000000000000000",
+          conduitKey: "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00",
+          startTime: Math.floor(new Date().getTime() / 1000).toString(),
+          endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
+          offer: [
               {
-                amount: ethers.utils.parseEther("0.00002").toString(),
-                token: testERC20Address,
-                endAmount: ethers.utils.parseEther("0.00004").toString(),
-                recipient: offerer
+                  itemType: 2,
+                  token: testERC721Address,
+                  identifier: nftId,
               },
-              {
-                amount: ethers.utils.parseEther("0.00001").toString(),
-                token: testERC20Address,
-                endAmount: ethers.utils.parseEther("0.00003").toString(),
-                recipient: "0xfcfC835903314e6a29751f6D57c08e8D01Cd246b"
-              },
-              {
-                amount: ethers.utils.parseEther("0.00001").toString(),
-                token: testERC20Address,
-                endAmount: ethers.utils.parseEther("0.00003").toString(),
-                recipient: "0xfcfC835903314e6a29751f6D57c08e8D01Cd246b"
-              }
-            ]
-        },
-        offerer
-    );
-    const order = await executeAllActions();
-    return order;
+          ],
+          consideration: [
+            {
+              amount: ethers.utils.parseEther("0.00002").toString(),
+              token: testERC20Address,
+              endAmount: ethers.utils.parseEther("0.00004").toString(),
+              recipient: offerer
+            },
+            {
+              amount: ethers.utils.parseEther("0.00001").toString(),
+              token: testERC20Address,
+              endAmount: ethers.utils.parseEther("0.00003").toString(),
+              recipient: "0xfcfC835903314e6a29751f6D57c08e8D01Cd246b"
+            },
+            {
+              amount: ethers.utils.parseEther("0.00001").toString(),
+              token: testERC20Address,
+              endAmount: ethers.utils.parseEther("0.00003").toString(),
+              recipient: "0xfcfC835903314e6a29751f6D57c08e8D01Cd246b"
+            }
+          ]
+      },
+      offerer
+  );
+
+  const order = await executeAllActions();
+  return order;
 }
 main();
