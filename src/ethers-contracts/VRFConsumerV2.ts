@@ -26,6 +26,42 @@ import type {
   OnEvent,
 } from "./common";
 
+export type SpentItemStruct = {
+  itemType: BigNumberish;
+  token: string;
+  identifier: BigNumberish;
+  amount: BigNumberish;
+};
+
+export type SpentItemStructOutput = [number, string, BigNumber, BigNumber] & {
+  itemType: number;
+  token: string;
+  identifier: BigNumber;
+  amount: BigNumber;
+};
+
+export type ReceivedItemStruct = {
+  itemType: BigNumberish;
+  token: string;
+  identifier: BigNumberish;
+  amount: BigNumberish;
+  recipient: string;
+};
+
+export type ReceivedItemStructOutput = [
+  number,
+  string,
+  BigNumber,
+  BigNumber,
+  string
+] & {
+  itemType: number;
+  token: string;
+  identifier: BigNumber;
+  amount: BigNumber;
+  recipient: string;
+};
+
 export type OfferItemStruct = {
   itemType: BigNumberish;
   token: string;
@@ -154,6 +190,7 @@ export interface VRFConsumerV2Interface extends utils.Interface {
     "s_numWords()": FunctionFragment;
     "s_randomWords(uint256)": FunctionFragment;
     "s_requestId()": FunctionFragment;
+    "transferPremium(((address,address,(uint8,address,uint256,uint256,uint256)[],(uint8,address,uint256,uint256,uint256,address)[],uint8,uint256,uint256,bytes32,uint256,bytes32,uint256),bytes)[])": FunctionFragment;
   };
 
   getFunction(
@@ -164,6 +201,7 @@ export interface VRFConsumerV2Interface extends utils.Interface {
       | "s_numWords"
       | "s_randomWords"
       | "s_requestId"
+      | "transferPremium"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -190,6 +228,10 @@ export interface VRFConsumerV2Interface extends utils.Interface {
     functionFragment: "s_requestId",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "transferPremium",
+    values: [OrderStruct[]]
+  ): string;
 
   decodeFunctionResult(functionFragment: "numerators", data: BytesLike): Result;
   decodeFunctionResult(
@@ -209,13 +251,94 @@ export interface VRFConsumerV2Interface extends utils.Interface {
     functionFragment: "s_requestId",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferPremium",
+    data: BytesLike
+  ): Result;
 
   events: {
+    "CounterIncremented(uint256,address)": EventFragment;
+    "OrderCancelled(bytes32,address,address)": EventFragment;
+    "OrderFulfilled(bytes32,address,address,address,(uint8,address,uint256,uint256)[],(uint8,address,uint256,uint256,address)[])": EventFragment;
+    "OrderValidated(bytes32,(address,address,(uint8,address,uint256,uint256,uint256)[],(uint8,address,uint256,uint256,uint256,address)[],uint8,uint256,uint256,bytes32,uint256,bytes32,uint256))": EventFragment;
+    "OrdersMatched(bytes32[])": EventFragment;
     "ReturnedRandomness(uint256[])": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "CounterIncremented"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OrderCancelled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OrderFulfilled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OrderValidated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OrdersMatched"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ReturnedRandomness"): EventFragment;
 }
+
+export interface CounterIncrementedEventObject {
+  newCounter: BigNumber;
+  offerer: string;
+}
+export type CounterIncrementedEvent = TypedEvent<
+  [BigNumber, string],
+  CounterIncrementedEventObject
+>;
+
+export type CounterIncrementedEventFilter =
+  TypedEventFilter<CounterIncrementedEvent>;
+
+export interface OrderCancelledEventObject {
+  orderHash: string;
+  offerer: string;
+  zone: string;
+}
+export type OrderCancelledEvent = TypedEvent<
+  [string, string, string],
+  OrderCancelledEventObject
+>;
+
+export type OrderCancelledEventFilter = TypedEventFilter<OrderCancelledEvent>;
+
+export interface OrderFulfilledEventObject {
+  orderHash: string;
+  offerer: string;
+  zone: string;
+  recipient: string;
+  offer: SpentItemStructOutput[];
+  consideration: ReceivedItemStructOutput[];
+}
+export type OrderFulfilledEvent = TypedEvent<
+  [
+    string,
+    string,
+    string,
+    string,
+    SpentItemStructOutput[],
+    ReceivedItemStructOutput[]
+  ],
+  OrderFulfilledEventObject
+>;
+
+export type OrderFulfilledEventFilter = TypedEventFilter<OrderFulfilledEvent>;
+
+export interface OrderValidatedEventObject {
+  orderHash: string;
+  orderParameters: OrderParametersStructOutput;
+}
+export type OrderValidatedEvent = TypedEvent<
+  [string, OrderParametersStructOutput],
+  OrderValidatedEventObject
+>;
+
+export type OrderValidatedEventFilter = TypedEventFilter<OrderValidatedEvent>;
+
+export interface OrdersMatchedEventObject {
+  orderHashes: string[];
+}
+export type OrdersMatchedEvent = TypedEvent<
+  [string[]],
+  OrdersMatchedEventObject
+>;
+
+export type OrdersMatchedEventFilter = TypedEventFilter<OrdersMatchedEvent>;
 
 export interface ReturnedRandomnessEventObject {
   randomWords: BigNumber[];
@@ -280,6 +403,11 @@ export interface VRFConsumerV2 extends BaseContract {
     ): Promise<[BigNumber]>;
 
     s_requestId(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    transferPremium(
+      orders: OrderStruct[],
+      overrides?: Overrides & { from?: string }
+    ): Promise<ContractTransaction>;
   };
 
   numerators(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
@@ -304,6 +432,11 @@ export interface VRFConsumerV2 extends BaseContract {
   ): Promise<BigNumber>;
 
   s_requestId(overrides?: CallOverrides): Promise<BigNumber>;
+
+  transferPremium(
+    orders: OrderStruct[],
+    overrides?: Overrides & { from?: string }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     numerators(
@@ -331,9 +464,63 @@ export interface VRFConsumerV2 extends BaseContract {
     ): Promise<BigNumber>;
 
     s_requestId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferPremium(
+      orders: OrderStruct[],
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
+    "CounterIncremented(uint256,address)"(
+      newCounter?: null,
+      offerer?: string | null
+    ): CounterIncrementedEventFilter;
+    CounterIncremented(
+      newCounter?: null,
+      offerer?: string | null
+    ): CounterIncrementedEventFilter;
+
+    "OrderCancelled(bytes32,address,address)"(
+      orderHash?: null,
+      offerer?: string | null,
+      zone?: string | null
+    ): OrderCancelledEventFilter;
+    OrderCancelled(
+      orderHash?: null,
+      offerer?: string | null,
+      zone?: string | null
+    ): OrderCancelledEventFilter;
+
+    "OrderFulfilled(bytes32,address,address,address,(uint8,address,uint256,uint256)[],(uint8,address,uint256,uint256,address)[])"(
+      orderHash?: null,
+      offerer?: string | null,
+      zone?: string | null,
+      recipient?: null,
+      offer?: null,
+      consideration?: null
+    ): OrderFulfilledEventFilter;
+    OrderFulfilled(
+      orderHash?: null,
+      offerer?: string | null,
+      zone?: string | null,
+      recipient?: null,
+      offer?: null,
+      consideration?: null
+    ): OrderFulfilledEventFilter;
+
+    "OrderValidated(bytes32,(address,address,(uint8,address,uint256,uint256,uint256)[],(uint8,address,uint256,uint256,uint256,address)[],uint8,uint256,uint256,bytes32,uint256,bytes32,uint256))"(
+      orderHash?: null,
+      orderParameters?: null
+    ): OrderValidatedEventFilter;
+    OrderValidated(
+      orderHash?: null,
+      orderParameters?: null
+    ): OrderValidatedEventFilter;
+
+    "OrdersMatched(bytes32[])"(orderHashes?: null): OrdersMatchedEventFilter;
+    OrdersMatched(orderHashes?: null): OrdersMatchedEventFilter;
+
     "ReturnedRandomness(uint256[])"(
       randomWords?: null
     ): ReturnedRandomnessEventFilter;
@@ -366,6 +553,11 @@ export interface VRFConsumerV2 extends BaseContract {
     ): Promise<BigNumber>;
 
     s_requestId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferPremium(
+      orders: OrderStruct[],
+      overrides?: Overrides & { from?: string }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -394,5 +586,10 @@ export interface VRFConsumerV2 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     s_requestId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transferPremium(
+      orders: OrderStruct[],
+      overrides?: Overrides & { from?: string }
+    ): Promise<PopulatedTransaction>;
   };
 }

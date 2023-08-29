@@ -36,7 +36,9 @@
     "prettier:fix": "prettier --write . && prettier-package-json --write package.json",
     "test": "hardhat test",
     "debug": "env-cmd -f .env nodemon src/index.ts",
-    "debug:old": "env-cmd -f .env nodemon src/index.backup.ts"
+    "debug:old": "env-cmd -f .env nodemon src/index.backup.ts",
+    "debug:test": "env-cmd -f .env nodemon src/test.ts",
+    "debug:fee": "env-cmd -f .env nodemon src/index.fee.ts"
   },
   "types": "lib/index.d.ts",
   "dependencies": {

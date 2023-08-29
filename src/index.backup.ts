@@ -14,10 +14,10 @@ import { MatchOrdersFulfillment } from "@opensea/seaport-js/lib/types";
 const provider = new ethers.providers.JsonRpcProvider(
   "https://eth-sepolia.public.blastapi.io"
 );
-const smeSeaportAddress = "0x45a7f5Ff630D31Eeb1e00dc24DF2f23DF1bA0A7C"
+const smeSeaportAddress = "0xCFA6a8eB4dFc41d7f924CDcf53D5930bE07ad504"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
-const nftId = "19"
+const nftId = "35"
 
 const main = async () => {
     const makerOrder = await build_maker_order();
