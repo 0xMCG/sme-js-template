@@ -17,7 +17,7 @@ const provider = new ethers.providers.JsonRpcProvider(
 const smeSeaportAddress = "0x5315046948f1a9ead4E29f3cdd1a957bc71BEAcE"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
-const nftId = "51"
+const nftId = "52"
 
 export const CONDUIT_KEYS_TO_CONDUIT = {
   "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00": "0x0681bc8f138ca32ed7725b91e8d11cfb6e10eb5f",
@@ -100,13 +100,13 @@ const main = async () => {
         SeaportABIvSME,
         Signer,
     ) as SMESeaport;
-    smeContract.matchOrders([makerOrder,takerOrder], modeOrderFulfillments, 999, "0x00",{gasLimit: 1500000})
+    smeContract.matchOrders([makerOrder,takerOrder], modeOrderFulfillments, 1, "0x00",{gasLimit: 1500000})
      .then(console.log);
 
-    //  await sleep(120000);
+     await sleep(150000);
 
-    //  smeContract.matchOrders([makerOrder,takerOrder], modeOrderFulfillments, 999, "0x00",{gasLimit: 1500000})
-    //  .then(console.log);
+     smeContract.matchOrders([makerOrder,takerOrder], modeOrderFulfillments, 999, "0x00",{gasLimit: 1500000})
+     .then(console.log);
     
 }
 

@@ -38,7 +38,9 @@
     "debug": "env-cmd -f .env nodemon src/index.ts",
     "debug:old": "env-cmd -f .env nodemon src/index.backup.ts",
     "debug:test": "env-cmd -f .env nodemon src/test.ts",
-    "debug:fee": "env-cmd -f .env nodemon src/index.fee.ts"
+    "debug:fee": "env-cmd -f .env nodemon src/index.fee.ts",
+    "debug:prepare": "env-cmd -f .env nodemon src/index.prepare.ts",
+    "debug:match": "env-cmd -f .env nodemon src/index.match.ts"
   },
   "types": "lib/index.d.ts",
   "dependencies": {

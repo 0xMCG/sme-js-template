@@ -8,6 +8,8 @@
     "./src/typechain-types/**/*",
     "./test",
     "./hardhat.config.ts",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "takerOrder.json",
+    "makerOrder.json"
   ]
 }
