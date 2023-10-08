@@ -17,9 +17,9 @@ import { MatchOrdersFulfillment } from "@opensea/seaport-js/lib/types";
 const fs = require("fs");
 // Provider must be provided to the signer when supplying a custom signer
 const provider = new ethers.providers.JsonRpcProvider(
-  "https://eth-sepolia.public.blastapi.io"
+  "http://127.0.0.1:8545"
 );
-const smeSeaportAddress = "0xFBAf7DB4A17B0Ed9841cB8DeF69Eb0CFD52276aF"
+const smeSeaportAddress = "0xe5223a0A0e565833e958964c04fD989015B03C32"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC20Address2 = "0x6c877a0f432feaab6052d8cc4ae2cf3d686d589f"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
@@ -38,11 +38,9 @@ function sleep(ms: any) {
 }
 
 const main = async () => {
-    const takerOrder = await build_taker_order();
+    const [takerOrder, makerOrder, makerOrder2] = await build_bid_scenario();
     fs.writeFileSync("/Users/qiufan/bova/takerOrder.json", JSON.stringify(takerOrder));
-    const makerOrder = await build_maker_order();
     fs.writeFileSync("/Users/qiufan/bova/makerOrder.json", JSON.stringify(makerOrder));
-    const makerOrder2 = await build_maker_order();
     fs.writeFileSync("/Users/qiufan/bova/makerOrder2.json", JSON.stringify(makerOrder2));
     const premiumOrder = await build_premium_order();
     const privateKey = process.env["MAKER"] as string;
@@ -60,8 +58,22 @@ const main = async () => {
         SeaportABIvSME,
         Signer,
     ) as SMESeaport;
-    smeContract.prepare([makerOrder, makerOrder2, premiumOrder, takerOrder], [2], ["0x28c73A60ccF8c66c14EbA8935984e616Df2926e3"], 2, {gasLimit: 1000000})
+    smeContract.prepare([makerOrder, makerOrder2, takerOrder, premiumOrder], [3], ["0x28c73A60ccF8c66c14EbA8935984e616Df2926e3"], 2, {gasLimit: 1000000})
      .then(console.log);
+}
+
+async function build_ask_scenario() {
+  const takerOrder = await build_taker_order();
+  const makerOrder = await build_maker_order();
+  const makerOrder2 = await build_maker_order2();
+  return [takerOrder, makerOrder, makerOrder2];
+}
+
+async function build_bid_scenario() {
+  const takerOrder = await build_taker_order_for_bid();
+  const makerOrder = await build_maker_order_for_bid();
+  const makerOrder2 = await build_maker_order2_for_bid();
+  return [takerOrder, makerOrder, makerOrder2];
 }
 
 async function build_taker_order() {
@@ -89,35 +101,6 @@ async function build_taker_order() {
                   amount: ethers.utils.parseEther("0.001").toString(),
                   token: testERC20Address,
                   endAmount: ethers.utils.parseEther("0.001").toString(),
-              },
-          ]
-      },
-      offerer
-  );
-
-  const order = await executeAllActions();
-  return order;
-}
-
-async function build_premium_order() {
-  const privateKey = process.env["TAKER"] as string;
-  const Signer = new ethers.Wallet(privateKey, provider);
-
-  const seaport = new Seaport(Signer,  {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
-
-  const offerer = "0x53B3F192A56a9cdA260476974443634a96529c72";
-  const { executeAllActions } = await seaport.createOrder(
-      {
-          zone: "0x0000000000000000000000000000000000000000",
-          conduitKey: "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00",
-          startTime: Math.floor(new Date().getTime() / 1000 - 60 * 60).toString(),
-          endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
-          consideration: [],
-          offer: [
-              {
-                  amount: ethers.utils.parseEther("0.00004").toString(),
-                  token: testERC20Address,
-                  endAmount: ethers.utils.parseEther("0.00004").toString(),
               },
           ]
       },
@@ -221,4 +204,140 @@ async function build_maker_order2() {
   const order = await executeAllActions();
   return order;
 }
+
+async function build_premium_order() {
+  const privateKey = process.env["TAKER"] as string;
+  const Signer = new ethers.Wallet(privateKey, provider);
+
+  const seaport = new Seaport(Signer,  {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
+
+  const offerer = "0x53B3F192A56a9cdA260476974443634a96529c72";
+  const { executeAllActions } = await seaport.createOrder(
+      {
+          zone: "0x0000000000000000000000000000000000000000",
+          conduitKey: "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00",
+          startTime: Math.floor(new Date().getTime() / 1000 - 60 * 60).toString(),
+          endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
+          consideration: [],
+          offer: [
+              {
+                  amount: ethers.utils.parseEther("0.00004").toString(),
+                  token: testERC20Address,
+                  endAmount: ethers.utils.parseEther("0.00004").toString(),
+              },
+          ]
+      },
+      offerer
+  );
+
+  const order = await executeAllActions();
+  return order;
+}
+
+async function build_maker_order_for_bid() {
+  const privateKey = process.env["MAKER"] as string;
+  const Signer = new ethers.Wallet(privateKey, provider);
+
+  const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
+  const offerer = "0x28c73A60ccF8c66c14EbA8935984e616Df2926e3";
+  const { executeAllActions } = await seaport.createOrder(
+      {
+          zone: "0x0000000000000000000000000000000000000000",
+          conduitKey: "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00",
+          startTime: Math.floor(new Date().getTime() / 1000 - 60 * 60).toString(),
+          endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
+          offer: [
+              {
+                  amount: ethers.utils.parseEther("0.002").toString(),
+                  token: testERC20Address2,
+                  endAmount: ethers.utils.parseEther("0.004").toString(),
+              },
+          ],
+          consideration: [
+            {
+              amount: ethers.utils.parseEther("0.00002").toString(),
+              token: testERC20Address,
+              endAmount: ethers.utils.parseEther("0.00002").toString(),
+              recipient: offerer
+            }
+          ]
+      },
+      offerer
+  );
+
+  const order = await executeAllActions();
+  return order;
+}
+
+
+async function build_maker_order2_for_bid() {
+  const privateKey = process.env["MAKER"] as string;
+  const Signer = new ethers.Wallet(privateKey, provider);
+
+  const seaport = new Seaport(Signer, {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
+  const offerer = "0x28c73A60ccF8c66c14EbA8935984e616Df2926e3";
+  const { executeAllActions } = await seaport.createOrder(
+      {
+          zone: "0x0000000000000000000000000000000000000000",
+          conduitKey: "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00",
+          startTime: Math.floor(new Date().getTime() / 1000 - 60 * 60).toString(),
+          endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
+          offer: [
+              {
+                  amount: ethers.utils.parseEther("0.02").toString(),
+                  token: testERC20Address2,
+                  endAmount: ethers.utils.parseEther("0.05").toString(),
+              },
+          ],
+          consideration: [
+            {
+              amount: ethers.utils.parseEther("0.00001").toString(),
+              token: testERC20Address,
+              endAmount: ethers.utils.parseEther("0.00001").toString(),
+              recipient: offerer
+            }
+          ]
+      },
+      offerer
+  );
+
+  const order = await executeAllActions();
+  return order;
+}
+
+async function build_taker_order_for_bid() {
+  const privateKey = process.env["TAKER"] as string;
+  const Signer = new ethers.Wallet(privateKey, provider);
+
+  const seaport = new Seaport(Signer,  {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
+
+  const offerer = "0x53B3F192A56a9cdA260476974443634a96529c72";
+  const { executeAllActions } = await seaport.createOrder(
+      {
+          zone: "0x0000000000000000000000000000000000000000",
+          conduitKey: "0x28c73a60ccf8c66c14eba8935984e616df2926e3aaaaaaaaaaaaaaaaaaaaaa00",
+          startTime: Math.floor(new Date().getTime() / 1000 - 60 * 60).toString(),
+          endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
+          consideration: [
+              {
+                amount: ethers.utils.parseEther("0.022").toString(),
+                token: testERC20Address2,
+                endAmount: ethers.utils.parseEther("0.054").toString(),
+              },
+          ],
+          offer: [
+              {
+                  amount: ethers.utils.parseEther("0.000021").toString(),
+                  token: testERC20Address,
+                  endAmount: ethers.utils.parseEther("0.000021").toString(),
+              },
+          ]
+      },
+      offerer
+  );
+
+  const order = await executeAllActions();
+  return order;
+}
+
 main();

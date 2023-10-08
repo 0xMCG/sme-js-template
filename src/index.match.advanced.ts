@@ -5,17 +5,17 @@ import {
 import {
   Seaport
 } from "@opensea/seaport-js";
-import { SeaportABIvSME } from "./abi/Seaport_vSME_dual";
+import { SeaportABIvSME } from "./abi/Seaport_vSME";
 import type {
   Seaport as SMESeaport, OrderProbilityStruct
-} from "./typechain-types-dual/contracts/Seaport";
+} from "./seaport-types/contracts/Seaport";
 import { MatchOrdersFulfillment} from "@opensea/seaport-js/lib/types";
 const fs = require("fs");
 // Provider must be provided to the signer when supplying a custom signer
 const provider = new ethers.providers.JsonRpcProvider(
   "http://127.0.0.1:8545"
 );
-const smeSeaportAddress = "0xe5223a0A0e565833e958964c04fD989015B03C32"
+const smeSeaportAddress = "0xFBAf7DB4A17B0Ed9841cB8DeF69Eb0CFD52276aF"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
 const nftId = "53"
@@ -63,34 +63,34 @@ const main = async () => {
       },
     ],
   });
-  // modeOrderFulfillments.push({
-  //   offerComponents: [
-  //     {
-  //       orderIndex: 2,
-  //       itemIndex: 0,
-  //     },
-  //   ],
-  //   considerationComponents: [
-  //     {
-  //       orderIndex: 0,
-  //       itemIndex: 1,
-  //     },
-  //   ],
-  // });
-  // modeOrderFulfillments.push({
-  //   offerComponents: [
-  //     {
-  //       orderIndex: 2,
-  //       itemIndex: 0,
-  //     },
-  //   ],
-  //   considerationComponents: [
-  //     {
-  //       orderIndex: 0,
-  //       itemIndex: 2,
-  //     },
-  //   ],
-  // });
+  modeOrderFulfillments.push({
+    offerComponents: [
+      {
+        orderIndex: 2,
+        itemIndex: 0,
+      },
+    ],
+    considerationComponents: [
+      {
+        orderIndex: 0,
+        itemIndex: 1,
+      },
+    ],
+  });
+  modeOrderFulfillments.push({
+    offerComponents: [
+      {
+        orderIndex: 2,
+        itemIndex: 0,
+      },
+    ],
+    considerationComponents: [
+      {
+        orderIndex: 0,
+        itemIndex: 2,
+      },
+    ],
+  });
   modeOrderFulfillments.push({
     offerComponents: [
       {
@@ -119,34 +119,34 @@ const main = async () => {
       },
     ],
   });
-  // modeOrderFulfillments.push({
-  //   offerComponents: [
-  //     {
-  //       orderIndex: 2,
-  //       itemIndex: 0,
-  //     },
-  //   ],
-  //   considerationComponents: [
-  //     {
-  //       orderIndex: 1,
-  //       itemIndex: 1,
-  //     },
-  //   ],
-  // });
-  // modeOrderFulfillments.push({
-  //   offerComponents: [
-  //     {
-  //       orderIndex: 2,
-  //       itemIndex: 0,
-  //     },
-  //   ],
-  //   considerationComponents: [
-  //     {
-  //       orderIndex: 1,
-  //       itemIndex: 2,
-  //     },
-  //   ],
-  // });
+  modeOrderFulfillments.push({
+    offerComponents: [
+      {
+        orderIndex: 2,
+        itemIndex: 0,
+      },
+    ],
+    considerationComponents: [
+      {
+        orderIndex: 1,
+        itemIndex: 1,
+      },
+    ],
+  });
+  modeOrderFulfillments.push({
+    offerComponents: [
+      {
+        orderIndex: 2,
+        itemIndex: 0,
+      },
+    ],
+    considerationComponents: [
+      {
+        orderIndex: 1,
+        itemIndex: 2,
+      },
+    ],
+  });
   console.log(modeOrderFulfillments);
 
   const orderProbility: OrderProbilityStruct[] = [];
@@ -156,20 +156,14 @@ const main = async () => {
   const seaport = new Seaport(Signer,  {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
   orderProbility.push({
     orderHash: seaport.getOrderHash(makerOrder.parameters),
-    numerator: 1,
-    denominator: 2
+    numerator: 8,
+    denominator: 10
   })
 
   orderProbility.push({
     orderHash: seaport.getOrderHash(makerOrder2.parameters),
-    numerator: 1,
-    denominator: 2
-  })
-
-  orderProbility.push({
-    orderHash: seaport.getOrderHash(takerOrder.parameters),
-    numerator: 1,
-    denominator: 2
+    numerator: 7,
+    denominator: 10
   })
 
   const smeContract = new Contract(
@@ -177,7 +171,7 @@ const main = async () => {
       SeaportABIvSME,
       Signer,
   ) as SMESeaport;
-  smeContract.matchOrdersWithRandom([makerOrder,makerOrder2,takerOrder],modeOrderFulfillments,"55787328336344877513287623867046699577771021509143025937635160976237905236486",orderProbility, {gasLimit: 1500000})
+  smeContract.matchOrdersWithRandom([makerOrder,makerOrder2,takerOrder],modeOrderFulfillments,"9103446502835949147394302137657501674772360370749884487428378497707187172866",orderProbility, {gasLimit: 1500000})
    .then(console.log);
 }
 
