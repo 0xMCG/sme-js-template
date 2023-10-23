@@ -25,6 +25,7 @@ const testERC20Address2 = "0x6c877a0f432feaab6052d8cc4ae2cf3d686d589f"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
 const conduitController = "0x7b4dAf65974871cb1F9eec4Fd933E27a365dDA72"
 const conduitAddress = "0x0681Bc8F138CA32ED7725B91E8D11CfB6e10eb5f"
+const testERC1155Address = "0x560B65205dEA9E14bB169c91650915503c41928C"
 const nftId = "54"
 
 export const CONDUIT_KEYS_TO_CONDUIT = {
@@ -43,7 +44,8 @@ const main = async () => {
     fs.writeFileSync("/Users/qiufan/bova/makerOrder.json", JSON.stringify(makerOrder));
     fs.writeFileSync("/Users/qiufan/bova/makerOrder2.json", JSON.stringify(makerOrder2));
     const premiumOrder = await build_premium_order();
-    const privateKey = process.env["MAKER"] as string;
+    // const privateKey = process.env["MAKER"] as string;
+    const privateKey = "127d5c48f0625b2e6af6b642d839eaf17dc65f1682513a810bf3beca7ba1e393";
     const Signer = new ethers.Wallet(privateKey, provider);
     // const conduitManagerContract = new Contract(
     //   conduitController,
@@ -58,7 +60,7 @@ const main = async () => {
         SeaportABIvSME,
         Signer,
     ) as SMESeaport;
-    smeContract.prepare([makerOrder, makerOrder2, takerOrder], [], [], 2, {gasLimit: 1000000})
+    smeContract.prepare([makerOrder, takerOrder], [], [], 1, {gasLimit: 1000000})
      .then(console.log);
 }
 
@@ -248,16 +250,18 @@ async function build_maker_order_for_bid() {
           endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
           offer: [
               {
-                  amount: ethers.utils.parseEther("0.002").toString(),
-                  token: testERC20Address2,
-                  endAmount: ethers.utils.parseEther("0.004").toString(),
+                  amount: ethers.utils.parseEther("1").toString(),
+                  token: testERC20Address,
+                  endAmount: ethers.utils.parseEther("100").toString(),
               },
           ],
           consideration: [
             {
-              amount: ethers.utils.parseEther("0.00002").toString(),
-              token: testERC20Address,
-              endAmount: ethers.utils.parseEther("0.00002").toString(),
+              itemType: 3,
+              amount: "1",
+              token: testERC1155Address,
+              endAmount: "1",
+              identifier: '0',
               recipient: offerer
             }
           ]
@@ -320,17 +324,20 @@ async function build_taker_order_for_bid() {
           endTime: Math.floor(new Date().getTime() / 1000 + 60 * 60).toString(),
           consideration: [
               {
-                amount: ethers.utils.parseEther("0.022").toString(),
-                token: testERC20Address2,
-                endAmount: ethers.utils.parseEther("0.054").toString(),
+                amount: ethers.utils.parseEther("1").toString(),
+                token: testERC20Address,
+                endAmount: ethers.utils.parseEther("100").toString(),
+                recipient: offerer
               },
           ],
           offer: [
-              {
-                  amount: ethers.utils.parseEther("0.000020").toString(),
-                  token: testERC20Address,
-                  endAmount: ethers.utils.parseEther("0.000020").toString(),
-              },
+            {
+              itemType:3,
+              amount: "1",
+              token: testERC1155Address,
+              endAmount: "1",
+              identifier: '0'
+            },
           ]
       },
       offerer

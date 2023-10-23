@@ -44,7 +44,7 @@ const main = async () => {
     ],
     considerationComponents: [
       {
-        orderIndex: 2,
+        orderIndex: 1,
         itemIndex: 0,
       },
     ],
@@ -52,7 +52,7 @@ const main = async () => {
   modeOrderFulfillments.push({
     offerComponents: [
       {
-        orderIndex: 2,
+        orderIndex: 1,
         itemIndex: 0,
       },
     ],
@@ -91,34 +91,34 @@ const main = async () => {
   //     },
   //   ],
   // });
-  modeOrderFulfillments.push({
-    offerComponents: [
-      {
-        orderIndex: 1,
-        itemIndex: 0,
-      },
-    ],
-    considerationComponents: [
-      {
-        orderIndex: 2,
-        itemIndex: 0,
-      },
-    ],
-  });
-  modeOrderFulfillments.push({
-    offerComponents: [
-      {
-        orderIndex: 2,
-        itemIndex: 0,
-      },
-    ],
-    considerationComponents: [
-      {
-        orderIndex: 1,
-        itemIndex: 0,
-      },
-    ],
-  });
+  // modeOrderFulfillments.push({
+  //   offerComponents: [
+  //     {
+  //       orderIndex: 1,
+  //       itemIndex: 0,
+  //     },
+  //   ],
+  //   considerationComponents: [
+  //     {
+  //       orderIndex: 2,
+  //       itemIndex: 0,
+  //     },
+  //   ],
+  // });
+  // modeOrderFulfillments.push({
+  //   offerComponents: [
+  //     {
+  //       orderIndex: 2,
+  //       itemIndex: 0,
+  //     },
+  //   ],
+  //   considerationComponents: [
+  //     {
+  //       orderIndex: 1,
+  //       itemIndex: 0,
+  //     },
+  //   ],
+  // });
   // modeOrderFulfillments.push({
   //   offerComponents: [
   //     {
@@ -150,7 +150,8 @@ const main = async () => {
   console.log(modeOrderFulfillments);
 
   const orderProbility: OrderProbilityStruct[] = [];
-  const privateKey = process.env["MAKER"] as string;
+  // const privateKey = process.env["MAKER"] as string;
+  const privateKey = "127d5c48f0625b2e6af6b642d839eaf17dc65f1682513a810bf3beca7ba1e393";
   const Signer = new ethers.Wallet(privateKey, provider);
 
   const seaport = new Seaport(Signer,  {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
@@ -160,16 +161,16 @@ const main = async () => {
     denominator: 2
   })
 
-  orderProbility.push({
-    orderHash: seaport.getOrderHash(makerOrder2.parameters),
-    numerator: 1,
-    denominator: 2
-  })
+  // orderProbility.push({
+  //   orderHash: seaport.getOrderHash(makerOrder2.parameters),
+  //   numerator: 1,
+  //   denominator: 2
+  // })
 
   orderProbility.push({
     orderHash: seaport.getOrderHash(takerOrder.parameters),
     numerator: 1,
-    denominator: 2
+    denominator: 10
   })
 
   const smeContract = new Contract(
@@ -177,7 +178,7 @@ const main = async () => {
       SeaportABIvSME,
       Signer,
   ) as SMESeaport;
-  smeContract.matchOrdersWithRandom([makerOrder,makerOrder2,takerOrder],modeOrderFulfillments,"104149593419234066480315443546755097334713316902480486296894883453510209187936",orderProbility, {gasLimit: 1500000})
+  smeContract.matchOrdersWithRandom([makerOrder,takerOrder],modeOrderFulfillments,"60988515906682659016913472430012125772776922909139539273812808486365427925358",orderProbility, {gasLimit: 1500000})
    .then(console.log);
 }
 

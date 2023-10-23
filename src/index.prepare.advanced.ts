@@ -50,21 +50,21 @@ const main = async () => {
     const premiumOrder = await build_premium_order();
     const privateKey = process.env["MAKER"] as string;
     const Signer = new ethers.Wallet(privateKey, provider);
-    const conduitManagerContract = new Contract(
-      conduitController,
-      ConduitMangerABI,
-      Signer,
-    ) as LocalConduitController;
+    // const conduitManagerContract = new Contract(
+    //   conduitController,
+    //   ConduitMangerABI,
+    //   Signer,
+    // ) as LocalConduitController;
     
-    conduitManagerContract.updateChannel(conduitAddress, smeSeaportAddress, true).then(console.log);
+    // conduitManagerContract.updateChannel(conduitAddress, smeSeaportAddress, true).then(console.log);
 
-    // const smeContract = new Contract(
-    //     smeSeaportAddress,
-    //     SeaportABIvSME,
-    //     Signer,
-    // ) as SMESeaport;
-    // smeContract.addMember("0x28c73A60ccF8c66c14EbA8935984e616Df2926e3", {gasLimit: 1000000})
-    //  .then(console.log);
+    const smeContract = new Contract(
+        smeSeaportAddress,
+        SeaportABIvSME,
+        Signer,
+    ) as SMESeaport;
+    smeContract.addMember("0xee6EDF5eDae40F0a8Ed1174b4D5521954B5C6171", {gasLimit: 1000000})
+     .then(console.log);
 }
 
 async function build_taker_order() {
