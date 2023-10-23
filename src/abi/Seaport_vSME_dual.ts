@@ -64,11 +64,6 @@ const SeaportABIvSME = [
   },
   {
     inputs: [],
-    name: "ConsiderationCriteriaResolverOutOfRange",
-    type: "error",
-  },
-  {
-    inputs: [],
     name: "ConsiderationLengthNotEqualToTotalOriginal",
     type: "error",
   },
@@ -91,11 +86,6 @@ const SeaportABIvSME = [
       },
     ],
     name: "ConsiderationNotMet",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "CriteriaNotEnabledForItem",
     type: "error",
   },
   {
@@ -220,11 +210,6 @@ const SeaportABIvSME = [
     type: "error",
   },
   {
-    inputs: [],
-    name: "InvalidProof",
-    type: "error",
-  },
-  {
     inputs: [
       {
         internalType: "bytes32",
@@ -336,11 +321,6 @@ const SeaportABIvSME = [
     type: "error",
   },
   {
-    inputs: [],
-    name: "OfferCriteriaResolverOutOfRange",
-    type: "error",
-  },
-  {
     inputs: [
       {
         internalType: "bytes32",
@@ -349,17 +329,6 @@ const SeaportABIvSME = [
       },
     ],
     name: "OrderAlreadyFilled",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "enum Side",
-        name: "side",
-        type: "uint8",
-      },
-    ],
-    name: "OrderCriteriaResolverOutOfRange",
     type: "error",
   },
   {
@@ -421,38 +390,6 @@ const SeaportABIvSME = [
     type: "error",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "orderIndex",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "considerationIndex",
-        type: "uint256",
-      },
-    ],
-    name: "UnresolvedConsiderationCriteria",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "orderIndex",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "offerIndex",
-        type: "uint256",
-      },
-    ],
-    name: "UnresolvedOfferCriteria",
-    type: "error",
-  },
-  {
     inputs: [],
     name: "UnusedItemParameters",
     type: "error",
@@ -474,6 +411,25 @@ const SeaportABIvSME = [
       },
     ],
     name: "CounterIncremented",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "requestId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "isSuccess",
+        type: "bool",
+      },
+    ],
+    name: "MatchSuccessOrNot",
     type: "event",
   },
   {
@@ -759,6 +715,19 @@ const SeaportABIvSME = [
     ],
     name: "OwnershipTransferred",
     type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+    ],
+    name: "addMember",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
@@ -1411,6 +1380,45 @@ const SeaportABIvSME = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "data",
+        type: "bytes",
+      },
+    ],
+    name: "onERC1155Received",
+    outputs: [
+      {
+        internalType: "bytes4",
+        name: "",
+        type: "bytes4",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "owner",
     outputs: [
@@ -1577,12 +1585,25 @@ const SeaportABIvSME = [
     name: "prepare",
     outputs: [
       {
-        internalType: "bytes32[]",
+        internalType: "uint256",
         name: "",
-        type: "bytes32[]",
+        type: "uint256",
       },
     ],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+    ],
+    name: "removeMember",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

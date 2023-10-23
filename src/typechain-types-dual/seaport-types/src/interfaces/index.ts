@@ -9,7 +9,6 @@ export type { ConduitInterface } from "./ConduitInterface";
 export type { ConsiderationEventsAndErrors } from "./ConsiderationEventsAndErrors";
 export type { ConsiderationInterface } from "./ConsiderationInterface";
 export type { ContractOffererInterface } from "./ContractOffererInterface";
-export type { CriteriaResolutionErrors } from "./CriteriaResolutionErrors";
 export type { FulfillmentApplicationErrors } from "./FulfillmentApplicationErrors";
 export type { IERC165 } from "./IERC165";
 export type { IERC721Receiver } from "./IERC721Receiver";

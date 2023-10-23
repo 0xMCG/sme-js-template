@@ -418,6 +418,25 @@ const SeaportABIvSME = [
     inputs: [
       {
         indexed: false,
+        internalType: "uint256",
+        name: "requestId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "isSuccess",
+        type: "bool",
+      },
+    ],
+    name: "MatchSuccessOrNot",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "bytes32",
         name: "orderHash",
         type: "bytes32",
@@ -696,6 +715,19 @@ const SeaportABIvSME = [
     ],
     name: "OwnershipTransferred",
     type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+    ],
+    name: "addMember",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
@@ -1201,27 +1233,12 @@ const SeaportABIvSME = [
             type: "tuple",
           },
           {
-            internalType: "uint120",
-            name: "numerator",
-            type: "uint120",
-          },
-          {
-            internalType: "uint120",
-            name: "denominator",
-            type: "uint120",
-          },
-          {
             internalType: "bytes",
             name: "signature",
             type: "bytes",
           },
-          {
-            internalType: "bytes",
-            name: "extraData",
-            type: "bytes",
-          },
         ],
-        internalType: "struct AdvancedOrder[]",
+        internalType: "struct Order[]",
         name: "",
         type: "tuple[]",
       },
@@ -1363,6 +1380,45 @@ const SeaportABIvSME = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "operator",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "data",
+        type: "bytes",
+      },
+    ],
+    name: "onERC1155Received",
+    outputs: [
+      {
+        internalType: "bytes4",
+        name: "",
+        type: "bytes4",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "owner",
     outputs: [
@@ -1501,27 +1557,12 @@ const SeaportABIvSME = [
             type: "tuple",
           },
           {
-            internalType: "uint120",
-            name: "numerator",
-            type: "uint120",
-          },
-          {
-            internalType: "uint120",
-            name: "denominator",
-            type: "uint120",
-          },
-          {
             internalType: "bytes",
             name: "signature",
             type: "bytes",
           },
-          {
-            internalType: "bytes",
-            name: "extraData",
-            type: "bytes",
-          },
         ],
-        internalType: "struct AdvancedOrder[]",
+        internalType: "struct Order[]",
         name: "orders",
         type: "tuple[]",
       },
@@ -1550,6 +1591,19 @@ const SeaportABIvSME = [
       },
     ],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "addr",
+        type: "address",
+      },
+    ],
+    name: "removeMember",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

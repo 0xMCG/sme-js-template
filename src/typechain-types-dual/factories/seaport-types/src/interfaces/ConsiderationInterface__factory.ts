@@ -814,9 +814,9 @@ const _abi = [
     name: "prepare",
     outputs: [
       {
-        internalType: "bytes32[]",
+        internalType: "uint256",
         name: "",
-        type: "bytes32[]",
+        type: "uint256",
       },
     ],
     stateMutability: "payable",

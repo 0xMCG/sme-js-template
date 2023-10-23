@@ -19,7 +19,7 @@ const fs = require("fs");
 const provider = new ethers.providers.JsonRpcProvider(
   "https://eth-sepolia.public.blastapi.io"
 );
-const smeSeaportAddress = "0xC6254AB94dA896e758fE5aB82d22fA137a358ae9"
+const smeSeaportAddress = "0xDe215cECCb5707Cad33a9500Cede0C585A42FDA2"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC20Address2 = "0x6c877a0f432feaab6052d8cc4ae2cf3d686d589f"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"

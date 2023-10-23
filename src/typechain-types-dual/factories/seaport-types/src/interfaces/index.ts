@@ -8,7 +8,6 @@ export { ConduitInterface__factory } from "./ConduitInterface__factory";
 export { ConsiderationEventsAndErrors__factory } from "./ConsiderationEventsAndErrors__factory";
 export { ConsiderationInterface__factory } from "./ConsiderationInterface__factory";
 export { ContractOffererInterface__factory } from "./ContractOffererInterface__factory";
-export { CriteriaResolutionErrors__factory } from "./CriteriaResolutionErrors__factory";
 export { FulfillmentApplicationErrors__factory } from "./FulfillmentApplicationErrors__factory";
 export { IERC165__factory } from "./IERC165__factory";
 export { IERC721Receiver__factory } from "./IERC721Receiver__factory";

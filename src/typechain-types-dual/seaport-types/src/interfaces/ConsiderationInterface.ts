@@ -574,7 +574,7 @@ export interface ConsiderationInterface extends BaseContract {
       recipients: PromiseOrValue<string>[],
       numWords: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<string[]>;
+    ): Promise<BigNumber>;
 
     validate(
       orders: OrderStruct[],

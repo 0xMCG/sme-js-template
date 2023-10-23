@@ -160,8 +160,6 @@ export type { AmountDeriver } from "./seaport-core/src/lib/AmountDeriver";
 export { AmountDeriver__factory } from "./factories/seaport-core/src/lib/AmountDeriver__factory";
 export type { Assertions } from "./seaport-core/src/lib/Assertions";
 export { Assertions__factory } from "./factories/seaport-core/src/lib/Assertions__factory";
-export type { BasicOrderFulfiller } from "./seaport-core/src/lib/BasicOrderFulfiller";
-export { BasicOrderFulfiller__factory } from "./factories/seaport-core/src/lib/BasicOrderFulfiller__factory";
 export type { Consideration } from "./seaport-core/src/lib/Consideration.sol/Consideration";
 export { Consideration__factory } from "./factories/seaport-core/src/lib/Consideration.sol/Consideration__factory";
 export type { IVRFInterface } from "./seaport-core/src/lib/Consideration.sol/IVRFInterface";
@@ -170,8 +168,6 @@ export type { ConsiderationBase } from "./seaport-core/src/lib/ConsiderationBase
 export { ConsiderationBase__factory } from "./factories/seaport-core/src/lib/ConsiderationBase__factory";
 export type { CounterManager } from "./seaport-core/src/lib/CounterManager";
 export { CounterManager__factory } from "./factories/seaport-core/src/lib/CounterManager__factory";
-export type { CriteriaResolution } from "./seaport-core/src/lib/CriteriaResolution";
-export { CriteriaResolution__factory } from "./factories/seaport-core/src/lib/CriteriaResolution__factory";
 export type { Executor } from "./seaport-core/src/lib/Executor.sol/Executor";
 export { Executor__factory } from "./factories/seaport-core/src/lib/Executor.sol/Executor__factory";
 export type { IERC20 } from "./seaport-core/src/lib/Executor.sol/IERC20";
@@ -214,8 +210,6 @@ export type { ConsiderationInterface } from "./seaport-types/src/interfaces/Cons
 export { ConsiderationInterface__factory } from "./factories/seaport-types/src/interfaces/ConsiderationInterface__factory";
 export type { ContractOffererInterface } from "./seaport-types/src/interfaces/ContractOffererInterface";
 export { ContractOffererInterface__factory } from "./factories/seaport-types/src/interfaces/ContractOffererInterface__factory";
-export type { CriteriaResolutionErrors } from "./seaport-types/src/interfaces/CriteriaResolutionErrors";
-export { CriteriaResolutionErrors__factory } from "./factories/seaport-types/src/interfaces/CriteriaResolutionErrors__factory";
 export type { FulfillmentApplicationErrors } from "./seaport-types/src/interfaces/FulfillmentApplicationErrors";
 export { FulfillmentApplicationErrors__factory } from "./factories/seaport-types/src/interfaces/FulfillmentApplicationErrors__factory";
 export type { ReentrancyErrors } from "./seaport-types/src/interfaces/ReentrancyErrors";

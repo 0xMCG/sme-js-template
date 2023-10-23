@@ -309,10 +309,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Assertions__factory>;
     getContractFactory(
-      name: "BasicOrderFulfiller",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.BasicOrderFulfiller__factory>;
-    getContractFactory(
       name: "Consideration",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Consideration__factory>;
@@ -328,10 +324,6 @@ declare module "hardhat/types/runtime" {
       name: "CounterManager",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CounterManager__factory>;
-    getContractFactory(
-      name: "CriteriaResolution",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.CriteriaResolution__factory>;
     getContractFactory(
       name: "Executor",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -416,10 +408,6 @@ declare module "hardhat/types/runtime" {
       name: "ContractOffererInterface",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ContractOffererInterface__factory>;
-    getContractFactory(
-      name: "CriteriaResolutionErrors",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.CriteriaResolutionErrors__factory>;
     getContractFactory(
       name: "FulfillmentApplicationErrors",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -840,11 +828,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Assertions>;
     getContractAt(
-      name: "BasicOrderFulfiller",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.BasicOrderFulfiller>;
-    getContractAt(
       name: "Consideration",
       address: string,
       signer?: ethers.Signer
@@ -864,11 +847,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.CounterManager>;
-    getContractAt(
-      name: "CriteriaResolution",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.CriteriaResolution>;
     getContractAt(
       name: "Executor",
       address: string,
@@ -974,11 +952,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ContractOffererInterface>;
-    getContractAt(
-      name: "CriteriaResolutionErrors",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.CriteriaResolutionErrors>;
     getContractAt(
       name: "FulfillmentApplicationErrors",
       address: string,
