@@ -38,8 +38,11 @@
     "debug": "env-cmd -f .env nodemon src/index.ts",
     "debug:test": "env-cmd -f .env nodemon src/test.ts",
     "debug:prepare:advanced": "env-cmd -f .env nodemon src/index.prepare.advanced.ts",
+    "debug:prepare:second": "env-cmd -f .env nodemon src/index.prepare.second.ts",
+    "debug:match:advanced": "env-cmd -f .env nodemon src/index.match.advanced.ts",
     "debug:prepare": "env-cmd -f .env nodemon src/index.prepare.ts",
-    "debug:match": "env-cmd -f .env nodemon src/index.match.ts"
+    "debug:match": "env-cmd -f .env nodemon src/index.match.ts",
+    "debug:auth": "env-cmd -f .env nodemon src/index.auth.ts"
   },
   "types": "lib/index.d.ts",
   "dependencies": {

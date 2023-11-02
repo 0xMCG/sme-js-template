@@ -157,8 +157,8 @@ const main = async () => {
   const seaport = new Seaport(Signer,  {overrides: {contractAddress: smeSeaportAddress}, conduitKeyToConduit: CONDUIT_KEYS_TO_CONDUIT});
   orderProbility.push({
     orderHash: seaport.getOrderHash(makerOrder.parameters),
-    numerator: 1,
-    denominator: 2
+    numerator: 0,
+    denominator: 10
   })
 
   // orderProbility.push({
@@ -169,7 +169,7 @@ const main = async () => {
 
   orderProbility.push({
     orderHash: seaport.getOrderHash(takerOrder.parameters),
-    numerator: 1,
+    numerator: 0,
     denominator: 10
   })
 
@@ -178,7 +178,7 @@ const main = async () => {
       SeaportABIvSME,
       Signer,
   ) as SMESeaport;
-  smeContract.matchOrdersWithRandom([makerOrder,takerOrder],modeOrderFulfillments,"60988515906682659016913472430012125772776922909139539273812808486365427925358",orderProbility, {gasLimit: 1500000})
+  smeContract.matchOrdersWithRandom([makerOrder,takerOrder],modeOrderFulfillments,"27675193603757099361522656863015038424208180310496985715281712913021214111352",orderProbility, {gasLimit: 1500000})
    .then(console.log);
 }
 
