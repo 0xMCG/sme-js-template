@@ -13,9 +13,9 @@ import { MatchOrdersFulfillment} from "@opensea/seaport-js/lib/types";
 const fs = require("fs");
 // Provider must be provided to the signer when supplying a custom signer
 const provider = new ethers.providers.JsonRpcProvider(
-  "http://127.0.0.1:8545"
+  "https://eth-sepolia.public.blastapi.io"
 );
-const smeSeaportAddress = "0x669a78Fa846b19c188E0Babf01EAE2f915E6936c"
+const smeSeaportAddress = "0xB692d86Eb7780E1B6D8A4DE32FE8B9eb4a962C8B"
 const testERC20Address = "0x8D4E2c8bc6b1E4Fa0ED829E6786E9096dd6DC265"
 const testERC721Address = "0xE4E39D40d1b9c70dcd115FEA8DaEF242194f2cC7"
 const nftId = "53"
@@ -223,7 +223,7 @@ const main = async () => {
       SeaportABIvSME,
       Signer,
   ) as SMESeaport;
-  smeContract.matchOrdersWithRandom([makerOrder,takerOrder],modeOrderFulfillments,"385714646392842681065797697475486871333518777900525327327651331661419549505",orderProbility, {gasLimit: 1500000})
+  smeContract.matchOrdersWithRandom([makerOrder,takerOrder],modeOrderFulfillments,"98312427770114260994600256909702041990265172888282925013698661984670634114454",orderProbility, {gasLimit: 1500000})
    .then(console.log);
 }
 
